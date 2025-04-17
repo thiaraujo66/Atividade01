@@ -28,14 +28,21 @@ do
     Console.Write("Escolha uma opção: ");
     opcao = int.Parse(Console.ReadLine());
 
-    switch (opcao)
+    try
     {
-        case 1: CadastrarCliente(); break;
-        case 2: ListarClientes(); break;
-        case 3: AtualizarCliente(); break;
-        case 4: RemoverCliente(); break;
-        case 0: Console.WriteLine("Saindo..."); break;
-        default: Console.WriteLine("Opção inválida!"); break;
+        switch (opcao)
+        {
+            case 1: CadastrarCliente(); break;
+            case 2: ListarClientes(); break;
+            case 3: AtualizarCliente(); break;
+            case 4: RemoverCliente(); break;
+            case 0: Console.WriteLine("Saindo..."); break;
+            default: Console.WriteLine("Opção inválida!"); break;
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("\nOcorreu um Erro: " + ex.Message);
     }
 
     if (opcao != 0)

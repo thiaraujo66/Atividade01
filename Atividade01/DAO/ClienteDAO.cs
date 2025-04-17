@@ -1,6 +1,8 @@
 ﻿using Atividade01.Interfaces;
 using Atividade01.Models;
 using Microsoft.Data.SqlClient;
+using System.Reflection.PortableExecutable;
+using System.Security.Cryptography;
 
 namespace Atividade01.DAO
 {
@@ -58,17 +60,61 @@ namespace Atividade01.DAO
 
         public void Deletar(int pId)
         {
-            throw new NotImplementedException();
+            using (SqlConnection con = new SqlConnection(_connectionString)) 
+            {
+                string query = "DELETE FROM Clientes WHERE Id = @Id";
+
+                SqlCommand command = new SqlCommand(query, con);
+                command.Parameters.AddWithValue("@Id", pId);
+
+                con.Open();
+                command.ExecuteNonQuery();
+            }
         }
 
         public void Incluir(string pNome, string pEmail)
         {
-            throw new NotImplementedException();
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                string query = "INSERT INTO Clientes (Nome, Email) VALUES (@Nome, @Email)";
+
+                SqlCommand command = new SqlCommand(query, con);
+                command.Parameters.AddWithValue("@Nome", pNome);
+                command.Parameters.AddWithValue("@Email", pEmail);
+
+                con.Open();
+                command.ExecuteNonQuery();
+            }
         }
 
         public List<Cliente> ListarTodos()
         {
-            throw new NotImplementedException();
+            List<Cliente> retorno = new List<Cliente>();
+
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT * FROM Clientes";
+
+                SqlCommand command = new SqlCommand(query, con);
+
+                con.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read()) 
+                {
+                    Cliente cliente = new Cliente() 
+                    {
+                        Id = (int)reader["Id"],
+                        Nome = reader["Nome"].ToString(),
+                        Email = reader["Email"].ToString()
+                    };
+
+                    retorno.Add(cliente);
+                }
+            }
+
+            return retorno;
         }
     }
 }
